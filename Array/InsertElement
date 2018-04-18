@@ -20,3 +20,34 @@ The output of the code above will be:
 
 Jani,Hege,Stale,Kai Jim,Borge
 Jani,Hege,Lene,Stale,Kai Jim,Borge
+
+2) Multiple arguments and chaining support
+
+/* Syntax:
+   array.insert(index, value1, value2, ..., valueN) */
+
+Array.prototype.insert = function(index) {
+    this.splice.apply(this, [index, 0].concat(
+        Array.prototype.slice.call(arguments, 1)));
+    return this;
+};
+It can insert multiple elements (as native splice does) and supports chaining:
+
+["a", "b", "c", "d"].insert(2, "X", "Y", "Z").slice(1, 6);
+// ["b", "X", "Y", "Z", "c"]
+
+3) array-type arguments merging and chaining support
+/* Syntax:
+   array.insert(index, value1, value2, ..., valueN) */
+
+Array.prototype.insert = function(index) {
+    index = Math.min(index, this.length);
+    arguments.length > 1
+        && this.splice.apply(this, [index, 0].concat([].pop.call(arguments)))
+        && this.insert.apply(this, arguments);
+    return this;
+};
+It can merge arrays from the arguments with the given array and also supports chaining:
+
+["a", "b", "c", "d"].insert(2, "V", ["W", "X", "Y"], "Z").join("-");
+// "a-b-V-W-X-Y-Z-c-d"
