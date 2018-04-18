@@ -1,0 +1,32 @@
+1) remove a particular element from an array
+
+First, find the index of the element you want to remove:
+
+var array = [2, 5, 9];
+var index = array.indexOf(5);
+Note: browser support for indexOf is limited; it is not supported in Internet Explorer 7 and 8.
+
+Then remove it with splice:
+
+if (index > -1) {
+    array.splice(index, 1);
+}
+The second parameter of splice is the number of elements to remove. Note that splice modifies the array in place and returns a new array containing the elements that have been removed.
+
+If you need indexOf in an unsupported browser, try the following polyfill. Find more info about this polyfill here.
+
+Array.prototype.indexOf || (Array.prototype.indexOf = function(d, e) {
+    var a;
+    if (null == this) throw new TypeError('"this" is null or not defined');
+    var c = Object(this),
+        b = c.length >>> 0;
+    if (0 === b) return -1;
+    a = +e || 0;
+    Infinity === Math.abs(a) && (a = 0);
+    if (a >= b) return -1;
+    for (a = Math.max(0 <= a ? a : b - Math.abs(a), 0); a < b;) {
+        if (a in c && c[a] === d) return a;
+        a++
+    }
+    return -1
+});
