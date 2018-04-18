@@ -30,3 +30,60 @@ Array.prototype.indexOf || (Array.prototype.indexOf = function(d, e) {
     }
     return -1
 });
+
+2) Removing item
+
+var value = 3
+
+var arr = [1, 2, 3, 4, 5, 3]
+
+arr = arr.filter(function(item) { 
+    return item !== value
+})
+
+console.log(arr)
+// [ 1, 2, 4, 5 ]
+
+3) Removing item (ES2015 code)
+let value = 3
+
+let arr = [1, 2, 3, 4, 5, 3]
+
+arr = arr.filter(item => item !== value)
+
+console.log(arr)
+// [ 1, 2, 4, 5 ]
+
+4) Removing multiple items
+An additional advantage of this method is that you can remove multiple items
+
+let forDeletion = [2, 3, 5]
+
+let arr = [1, 2, 3, 4, 5, 3]
+
+arr = arr.filter(item => !forDeletion.includes(item))
+// !!! Read below about array.includes(...) support !!!
+
+console.log(arr)
+// [ 1, 4 ]
+
+5) Removing multiple items 
+// array-lib.js
+
+export function remove(...forDeletion) {
+    return this.filter(item => !forDeletion.includes(item))
+}
+
+// main.js
+
+import { remove } from './array-lib.js'
+
+let arr = [1, 2, 3, 4, 5, 3]
+
+// :: This-Binding Syntax Proposal
+// using "remove" function as "virtual method"
+// without extending Array.prototype
+arr = arr::remove(2, 3, 5)
+
+console.log(arr)
+// [ 1, 4 ]
